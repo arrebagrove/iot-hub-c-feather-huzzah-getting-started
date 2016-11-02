@@ -4,15 +4,15 @@
 #define LED_PIN 0
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println("Blink sample started...");
-  pinMode(LED_PIN, OUTPUT);
+    Serial.begin(115200);
+    Serial.println("Blink sample started...");
+    pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
-  digitalWrite(LED_PIN, HIGH);
-  delay(500);
-  digitalWrite(LED_PIN, LOW);
-  delay(500);
-  Serial.println("blinking...");
+    digitalWrite(LED_PIN, HIGH);
+    delay(500);
+    digitalWrite(LED_PIN, LOW);
+    delay(500);
+    Serial.println("blinking...");
 }
