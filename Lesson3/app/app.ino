@@ -14,9 +14,9 @@
 #define LED_PIN 0
 #define MAX_MESSAGE_COUNT 20
 
-static WiFiClientSecure sslClient; // for ESP8266
-
 int sentMessageCount = 0;
+
+static WiFiClientSecure sslClient; // for ESP8266
 
 /*
  * The new version of AzureIoTHub library change the AzureIoTHubClient signature.
@@ -103,7 +103,7 @@ static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle)
 {
     ++sentMessageCount;
     char buffer[256];
-    sprintf(buffer, "{ \"deviceId\": \"%s\" , \"messageId\": %d }", "huzzah", sentMessageCount);
+    sprintf(buffer, "{\"deviceId\": \"%s\", \"messageId\" : %d}", "huzzah", sentMessageCount);
 
     IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray((const unsigned char*)buffer, strlen(buffer));
     if (messageHandle == NULL)

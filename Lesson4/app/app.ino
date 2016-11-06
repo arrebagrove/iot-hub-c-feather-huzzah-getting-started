@@ -101,7 +101,7 @@ void setup()
 void blinkLED()
 {
     digitalWrite(LED_PIN, HIGH);
-    delay(1000);
+    delay(500);
     digitalWrite(LED_PIN, LOW);
 }
 
