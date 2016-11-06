@@ -3,13 +3,15 @@
 
 #define LED_PIN 0
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     Serial.println("Blink sample started...");
     pinMode(LED_PIN, OUTPUT);
 }
 
-void loop() {
+void loop()
+{
     digitalWrite(LED_PIN, HIGH);
     delay(500);
     digitalWrite(LED_PIN, LOW);

@@ -12,7 +12,7 @@
 #include "config.h"
 #include "sdk/jsondecoder.h"
 
-const int LED_PIN = 0;
+#define LED_PIN 0
 bool lastMessageReceived = false;
 
 static WiFiClientSecure sslClient; // for ESP8266
@@ -29,14 +29,14 @@ static AzureIoTHubClient iotHubClient;
 AzureIoTHubClient iotHubClient(sslClient);
 #endif
 
-void initSerial() 
+void initSerial()
 {
   // Start serial and initialize stdout
     Serial.begin(115200);
     Serial.setDebugOutput(true);
 }
 
-void initWifi() 
+void initWifi()
 {
     // Attempt to connect to Wifi network:
     Serial.print("Attempting to connect to SSID: ");
@@ -71,14 +71,14 @@ void initTime()
 
         if (epochTime == 0)
         {
-        Serial.println("Fetching NTP epoch time failed! Waiting 2 seconds to retry.");
-        delay(2000);
+            Serial.println("Fetching NTP epoch time failed! Waiting 2 seconds to retry.");
+            delay(2000);
         }
         else
         {
-        Serial.print("Fetched NTP epoch time is: ");
-        Serial.println(epochTime);
-        break;
+            Serial.print("Fetched NTP epoch time is: ");
+            Serial.println(epochTime);
+            break;
         }
     }
 }
@@ -132,20 +132,20 @@ IOTHUBMESSAGE_DISPOSITION_RESULT receiveMessageCallback(IOTHUB_MESSAGE_HANDLE me
 
             MULTITREE_HANDLE tree = NULL;
 
-            if (JSON_DECODER_OK == JSONDecoder_JSON_To_MultiTree(temp, &tree))
+            if (JSONDecoder_JSON_To_MultiTree(temp, &tree) == JSON_DECODER_OK)
             {
                 const void* value = NULL;
 
-                if (MULTITREE_OK == MultiTree_GetLeafValue(tree, "/command", &value))
+                if (MultiTree_GetLeafValue(tree, "/command", &value) == MULTITREE_OK)
                 {
-                if (0 == strcmp((const char*)value, "\"blink\""))
-                {
-                    blinkLED();
-                }
-                else if (0 == strcmp((const char*)value, "\"stop\""))
-                {
-                    lastMessageReceived = true;
-                }
+                    if (strcmp((const char*)value, "\"blink\"") == 0)
+                    {
+                        blinkLED();
+                    }
+                    else if (strcmp((const char*)value, "\"stop\"") == 0)
+                    {
+                        lastMessageReceived = true;
+                    }
                 }
             }
 
@@ -177,7 +177,7 @@ void loop()
         int minimumPollingTime = 2;
         if (IoTHubClient_LL_SetOption(iotHubClientHandle, "MinimumPollingTime", &minimumPollingTime) != IOTHUB_CLIENT_OK)
         {
-        LogInfo("failure to set option \"MinimumPollingTime\"\r\n");
+            LogInfo("failure to set option \"MinimumPollingTime\"\r\n");
         }
 
         IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, receiveMessageCallback, NULL);

@@ -1,11 +1,11 @@
 ---
 services: iot-hub, iot-suite
-platforms: c
+platforms: arduino
 author: yaozheng
 ---
 
 ## Repository information
-- `app` sub-folder contains the sample Arduino application that blinks the LED attached to the Adafruit Feather HUZZAH ESP8266.
+- `app` sub-folder contains the sample Arduino application that blinks the LED attached to the Adafruit Feather HUZZAH ESP8266 board.
 - `config.json` contains required configuration settings.
 
 ### Install required tools

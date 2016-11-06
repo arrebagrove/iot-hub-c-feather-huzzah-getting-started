@@ -1,6 +1,6 @@
 ﻿/*
-* IoT Hub Adafruit Feather HUZZAH ESP8266 - Microsoft Sample Code - Copyright (c) 2016 - Licensed MIT
-*/
+ * IoT Hub Adafruit Feather HUZZAH ESP8266 - Microsoft Sample Code - Copyright (c) 2016 - Licensed MIT
+ */
 'use strict';
 
 var gulp = require('gulp');
@@ -23,7 +23,7 @@ require('gulp-common')(gulp, 'arduino-esp8266-huzzah', {
     "wifi_ssid": "[Wi-Fi SSID]",
     "wifi_password": "[Wi-Fi password]",
   },
-  configPostfix: 'huzzah',
+  configPostfix: 'arduino',
   app: ['app.ino', 'config.h']
 });
 
