@@ -1,6 +1,6 @@
 ﻿/*
-* IoT Hub Adafruit Feather HUZZAH ESP8266 - Microsoft Sample Code - Copyright (c) 2016 - Licensed MIT
-*/
+ * IoT Hub Adafruit Feather HUZZAH ESP8266 - Microsoft Sample Code - Copyright (c) 2016 - Licensed MIT
+ */
 'use strict';
 
 var gulp = require('gulp');
@@ -22,7 +22,7 @@ require('gulp-common')(gulp, 'arduino-esp8266-huzzah', {
     "wifi_password": "[Wi-Fi password]",
     "iot_hub_consumer_group_name": "cg1"
   },
-  configPostfix: 'huzzah',
+  configPostfix: 'arduino',
   app: ['app.ino', 'config.h']
 });
 
@@ -33,8 +33,8 @@ var config = gulp.config;
  */
 if (doesReadStorage) {
   gulp.task('query-table-storage', false, () => { receiveMessages(config); });
-  gulp.task('run', 'Runs deployed sample on the board', ['query-table-storage']);
+  gulp.task('run', 'Runs deployed sample on the board', ['deploy', 'query-table-storage']);
 } else {
   gulp.task('query-iot-hub-messages', false, () => { receiveMessages(config); });
-  gulp.task('run', 'Runs deployed sample on the board', ['query-iot-hub-messages']);
+  gulp.task('run', 'Runs deployed sample on the board', ['deploy', 'query-iot-hub-messages']);
 }

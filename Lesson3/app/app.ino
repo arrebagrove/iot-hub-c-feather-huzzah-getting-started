@@ -11,12 +11,17 @@
 
 #include "config.h"
 
+#define LED_PIN 0
+#define MAX_MESSAGE_COUNT 20
+
+int sentMessageCount = 0;
+
 static WiFiClientSecure sslClient; // for ESP8266
 
 /*
  * The new version of AzureIoTHub library change the AzureIoTHubClient signature.
- * As a temporary solution, we will test the definition of AzureIoTHubVersion, which is only defined 
- *    in the new AzureIoTHub library version. Once we totally deprecate the last version, we can take 
+ * As a temporary solution, we will test the definition of AzureIoTHubVersion, which is only defined
+ *    in the new AzureIoTHub library version. Once we totally deprecate the last version, we can take
  *    the #ifdef out.
  */
 #ifdef AzureIoTHubVersion
@@ -25,38 +30,39 @@ static AzureIoTHubClient iotHubClient;
 AzureIoTHubClient iotHubClient(sslClient);
 #endif
 
-void initSerial() {
+void initSerial()
+{
     // Start serial and initialize stdout
     Serial.begin(115200);
     Serial.setDebugOutput(true);
 }
 
-void initWifi() {
+void initWifi()
+{
     // Attempt to connect to Wifi network:
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
-
 
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
     WiFi.begin(ssid, pass);
     while (WiFi.status() != WL_CONNECTED)
     {
-      // Get Mac Address and show it.
-      // WiFi.macAddress(mac) save the mac address into a six length array, but the endian may be different. The huzzah board should
-      // start from mac[0] to mac[5], but some other kinds of board run in the oppsite direction.  
-      uint8_t mac[6];
-      WiFi.macAddress(mac);
-      Serial.printf("You device with MAC address %02x:%02x:%02x:%02x:%02x:%02x connects to %s failed! Waiting 10 seconds to retry.\r\n",
-        mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], ssid);
-      WiFi.begin(ssid, pass);
-      delay(10000);
+        // Get Mac Address and show it.
+        // WiFi.macAddress(mac) save the mac address into a six length array, but the endian may be different. The huzzah board should
+        // start from mac[0] to mac[5], but some other kinds of board run in the oppsite direction.
+        uint8_t mac[6];
+        WiFi.macAddress(mac);
+        Serial.printf("You device with MAC address %02x:%02x:%02x:%02x:%02x:%02x connects to %s failed! Waiting 10 seconds to retry.\r\n",
+            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], ssid);
+        WiFi.begin(ssid, pass);
+        delay(10000);
     }
 
     Serial.printf("Connected to wifi %s\r\n", ssid);
 }
 
 void initTime()
-{  
+{
     time_t epochTime;
     configTime(0, 0, "pool.ntp.org", "time.nist.gov");
 
@@ -83,9 +89,9 @@ static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userCon
     if (IOTHUB_CLIENT_CONFIRMATION_OK == result)
     {
         LogInfo("Message sent to Azure IoT Hub\r\n");
-        digitalWrite(0, LOW);
-        delay(100);
-        digitalWrite(0, HIGH);
+        digitalWrite(LED_PIN, LOW);
+        delay(500);
+        digitalWrite(LED_PIN, HIGH);
     }
     else
     {
@@ -93,9 +99,13 @@ static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userCon
     }
 }
 
-static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, const unsigned char* buffer, size_t size)
+static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle)
 {
-    IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(buffer, size);
+    ++sentMessageCount;
+    char buffer[256];
+    sprintf(buffer, "{\"deviceId\": \"%s\", \"messageId\" : %d}", "huzzah", sentMessageCount);
+
+    IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray((const unsigned char*)buffer, strlen(buffer));
     if (messageHandle == NULL)
     {
         LogInfo("unable to create a new IoTHubMessage\r\n");
@@ -117,8 +127,8 @@ static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, const unsign
 
 void setup()
 {
-    pinMode(0, OUTPUT);
-  
+    pinMode(LED_PIN, OUTPUT);
+
     initSerial();
     initWifi();
     initTime();
@@ -140,10 +150,10 @@ void loop()
     }
     else
     {
-        while (true)
+        while (sentMessageCount < MAX_MESSAGE_COUNT)
         {
-            sendMessage(iotHubClientHandle, (const unsigned char*)"message", 7);
-            IoTHubClient_LL_DoWork(iotHubClientHandle);            
+            sendMessage(iotHubClientHandle);
+            IoTHubClient_LL_DoWork(iotHubClientHandle);
             delay(2000);
         }
 
