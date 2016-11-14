@@ -13,7 +13,7 @@ to Azure table storage.
 See [Lesson 3: Send device-to-cloud messages]() for more information.
 
 ## Repository information
-- `app` sub-folder contains the sample main.c application that sends device-2-cloud messages and the CMakeLists.txt that builds main.c source code.
+- `app` sub-folder contains the sample app.ino application that sends device-2-cloud messages.
 - `arm-template.json` is the ARM template containing an Azure function app and a storage account.
 - `arm-template-param.json` file is the configuration file used by the ARM template.
 - `ReceiveDeviceMessages` sub-folder contains Node.js code for the Azure function.
