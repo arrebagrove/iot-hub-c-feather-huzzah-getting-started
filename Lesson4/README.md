@@ -12,6 +12,7 @@ See [Lesson 4: Send cloud-to-device messages]() for more information.
 
 ## Repository information
 - `app` sub-folder contains the sample Arduino application that receives cloud-2-device messages.
+- `config.json` contains required configuration settings.
 
 ## Running this sample
 Please follow the [Lesson 4: Send cloud-to-device messages]() for detailed walkthrough of the steps below.
@@ -29,11 +30,13 @@ Install required npm packages on the host:
   ```
 
 Create a JSON configuration file in the `.iot-hub-getting-started` sub-folder of the current user's home directory:
+  
   ```bash
   gulp init
   ```
 
 Install required tools/packages on the Adafruit Feather HUZZAH ESP8266 board, deploy sample application, and run it on the device:
+
   ```bash
   # For Windows command prompt
   gulp install-tools

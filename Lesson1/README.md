@@ -16,9 +16,9 @@ Please follow the [Lesson 1: Configure your device] for detailed walkthrough of 
 
 ### Install required tools
 
-```bash
-npm install -g gulp device-discovery-cli
-```
+  ```bash
+  npm install -g gulp device-discovery-cli
+  ```
 
 ### Deploy and run
 

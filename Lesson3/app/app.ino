@@ -11,8 +11,8 @@
 
 #include "config.h"
 
-#define LED_PIN 0
-#define MAX_MESSAGE_COUNT 20
+const int LED_PIN = 0;
+const int MAX_MESSAGE_COUNT = 20;
 
 static WiFiClientSecure sslClient; // for ESP8266
 
