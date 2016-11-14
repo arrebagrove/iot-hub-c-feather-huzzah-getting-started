@@ -13,7 +13,7 @@
 #include "sdk/jsondecoder.h"
 
 #define LED_PIN 0
-bool lastMessageReceived = false;
+static bool lastMessageReceived = false;
 
 static WiFiClientSecure sslClient; // for ESP8266
 
