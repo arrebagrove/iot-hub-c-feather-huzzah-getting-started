@@ -11,12 +11,14 @@
 
 #include "config.h"
 
-#define LED_PIN 0
-#define MAX_MESSAGE_COUNT 20
-
-int sentMessageCount = 0;
+const int LED_PIN = 0;
+const int MAX_MESSAGE_COUNT = 20;
 
 static WiFiClientSecure sslClient; // for ESP8266
+
+static int sentMessageCount = 0;
+static unsigned long lastMessageSentTime = 0;
+static bool messagePending = false;
 
 /*
  * The new version of AzureIoTHub library change the AzureIoTHubClient signature.
@@ -88,22 +90,23 @@ static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userCon
 {
     if (IOTHUB_CLIENT_CONFIRMATION_OK == result)
     {
+        ++sentMessageCount;
         LogInfo("Message sent to Azure IoT Hub\r\n");
         digitalWrite(LED_PIN, LOW);
-        delay(500);
+        delay(100);
         digitalWrite(LED_PIN, HIGH);
     }
     else
     {
         LogInfo("Failed to send message to Azure IoT Hub\r\n");
     }
+    messagePending = false;
 }
 
 static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle)
 {
-    ++sentMessageCount;
     char buffer[256];
-    sprintf(buffer, "{\"deviceId\": \"%s\", \"messageId\" : %d}", "huzzah", sentMessageCount);
+    sprintf(buffer, "{\"deviceId\": \"%s\", \"messageId\" : %d}", "huzzah", sentMessageCount + 1);
 
     IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray((const unsigned char*)buffer, strlen(buffer));
     if (messageHandle == NULL)
@@ -118,6 +121,8 @@ static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle)
         }
         else
         {
+            lastMessageSentTime = millis();
+            messagePending = true;
             LogInfo("IoTHubClient accepted the message for delivery\r\n");
         }
 
@@ -152,9 +157,12 @@ void loop()
     {
         while (sentMessageCount < MAX_MESSAGE_COUNT)
         {
-            sendMessage(iotHubClientHandle);
+            while((lastMessageSentTime + 2000 < millis()) && !messagePending)
+            {
+                sendMessage(iotHubClientHandle);
+            }
             IoTHubClient_LL_DoWork(iotHubClientHandle);
-            delay(2000);
+            delay(100);
         }
 
         IoTHubClient_LL_Destroy(iotHubClientHandle);
