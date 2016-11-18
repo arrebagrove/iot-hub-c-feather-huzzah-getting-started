@@ -25,38 +25,25 @@ Please follow the [Lesson 3: Send device-to-cloud messages]() for detailed walkt
 
 Install required npm packages on the host:
 
-  ```bash
-  # For Windows command prompt
-  npm install
-
-  # For macOS or Ubuntu
-  sudo npm install
-  ```
+```bash
+npm install
+```
 
 Create a JSON configuration file in the `.iot-hub-getting-started` sub-folder of the current user's home directory:
   
-  ```bash
-  gulp init
-  ```
+```bash
+gulp init
+```
 
 Install required tools/packages on the Adafruit Feather HUZZAH ESP8266 board, deploy sample application, and run it on the device:
   
-  ```bash
-  # For Windows command prompt
-  gulp install-tools
-  gulp run
-
-  # For macOS or Ubuntu
-  sudo gulp install-tools
-  sudo gulp run
-  ```
+```bash
+gulp install-tools
+gulp run
+```
 
 Run the sample application on the device and read messages persisted in the Azure storage:
   
-  ```bash
-  # For Windows command prompt
-  gulp run --read-storage
-
-  # For macOS or Ubuntu
-  sudo gulp run --read-storage
-  ```
+```bash
+gulp run --read-storage
+```

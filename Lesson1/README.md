@@ -24,22 +24,13 @@ Please follow the [Lesson 1: Configure your device] for detailed walkthrough of 
 
 Install required npm packages on the host:
 
-  ```bash
-  # For Windows command prompt
-  npm install
-
-  # For macOS or Ubuntu
-  sudo npm install
-  ```
+```bash
+npm install
+```
 
 Install required tools/packages for the  Adafruit Feather HUZZAH ESP8266 board, deploy sample application, and run it on the device:
 
-  ```bash
-  # For Windows command prompt
-  gulp install-tools
-  gulp run
-
-  # For macOS or Ubuntu
-  sudo gulp install-tools
-  sudo gulp run
-  ```
+```bash
+gulp install-tools
+gulp run
+```
