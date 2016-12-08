@@ -8,6 +8,7 @@
 #include <WiFiUdp.h>
 
 #include <AzureIoTHub.h>
+#include <AzureIoTProtocol_HTTP.h>
 
 #include "config.h"
 #include "sdk/jsondecoder.h"
